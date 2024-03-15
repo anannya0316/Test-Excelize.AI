@@ -1,35 +1,30 @@
 import streamlit as st
-import pandas as pd
-from PIL import Image
 
-# Function to display images and bounding boxes
 def display_image_with_boxes(image, boxes):
-    html_code = ""
-    for box in boxes:
-        if "x" in box and "y" in box:
-            html_code += f'<div style="position:absolute; left:{box["x"]}px; top:{box["y"]}px; width:100px; height:100px; border:2px solid red;"></div>'
-        else:
-            print("Invalid box:", box)
-    st.markdown(html_code, unsafe_allow_html=True)
+    st.image(image, use_column_width=True)
+    image_width = st.image(image).width
+    image_height = st.image(image).height
 
+    for box in boxes:
+        box_left = box["x"] * image_width
+        box_top = box["y"] * image_height
+        box_width = box["width"] * image_width
+        box_height = box["height"] * image_height
+
+        st.markdown(
+            f'<div style="position:relative; left:{box_left}px; top:{box_top}px; width:{box_width}px; height:{box_height}px; border:2px solid red;"></div>',
+            unsafe_allow_html=True
+        )
 
 def main():
-    st.title("Image Annotation Tool")
+    image = "path_to_your_image.jpg"  # Change this to the path of your image
+    boxes = [{"x": 0.1, "y": 0.1, "width": 0.2, "height": 0.2}]  # Example box, change as needed
 
-    # Upload image
-    uploaded_image = st.file_uploader("Upload Image", type=["jpg", "jpeg", "png"])
+    display_image_with_boxes(image, boxes)
 
-    if uploaded_image is not None:
-        # Display uploaded image
-        image = Image.open(uploaded_image)
-        st.image(image, caption="Uploaded Image", use_column_width=True)
+if __name__ == "__main__":
+    main()
 
-        # Render bounding boxes
-        boxes = [
-    {"x": 100, "y": 100},
-    {"x": 200, "y": 200},
-    # Add more boxes as needed
-]
   # Example bounding box coordinates
         display_image_with_boxes(image, boxes)
 
