@@ -1,44 +1,46 @@
 import streamlit as st
+import pandas as pd
+from PIL import ImageDraw, Image
 
 def display_image_with_boxes(image, boxes):
     st.image(image, use_column_width=True)
-    image_width = st.image(image).width
-    image_height = st.image(image).height
+    drawn = ImageDraw.Draw(image)
 
     for box in boxes:
-        box_left = box["x"] * image_width
-        box_top = box["y"] * image_height
-        box_width = box["width"] * image_width
-        box_height = box["height"] * image_height
+        xmin, ymin, xmax, ymax = box
+        drawn.rectangle([xmin, ymin, xmax, ymax], outline="red")
 
-        st.markdown(
-            f'<div style="position:relative; left:{box_left}px; top:{box_top}px; width:{box_width}px; height:{box_height}px; border:2px solid red;"></div>',
-            unsafe_allow_html=True
-        )
+    return image
 
 def main():
-    image = "path_to_your_image.jpg"  # Change this to the path of your image
-    boxes = [{"x": 0.1, "y": 0.1, "width": 0.2, "height": 0.2}]  # Example box, change as needed
+    st.title("Image Annotation Tool")
 
-    display_image_with_boxes(image, boxes)
+    uploaded_image = st.file_uploader("Upload Image", type=["jpg", "jpeg", "png"])
 
-if __name__ == "__main__":
-    main()
+    if uploaded_image is not None:
+        image = Image.open(uploaded_image)
+        st.image(image, caption="Uploaded Image", use_column_width=True)
 
-  # Example bounding box coordinates
-display_image_with_boxes(image, boxes)
+        num_boxes = st.number_input("Number of Boxes", min_value=1, value=1)
 
-        # Button to save annotations
-if st.button("Save Annotations"):
-        save_annotations(boxes)
+        if st.button("Annotate"):
+            boxes = []
+            for _ in range(num_boxes):
+                st.write(f"Box {_ + 1}")
+                xmin = st.number_input("X min", min_value=0, max_value=image.width - 1, value=0)
+                ymin = st.number_input("Y min", min_value=0, max_value=image.height - 1, value=0)
+                xmax = st.number_input("X max", min_value=xmin + 1, max_value=image.width, value=image.width)
+                ymax = st.number_input("Y max", min_value=ymin + 1, max_value=image.height, value=image.height)
+                boxes.append((xmin, ymin, xmax, ymax))
 
-def save_annotations(boxes):
-    # Convert bounding boxes to DataFrame
-    df = pd.DataFrame(boxes)
+            annotated_image = display_image_with_boxes(image.copy(), boxes)
+            st.image(annotated_image, caption="Annotated Image", use_column_width=True)
 
-    # Save DataFrame as CSV
-    df.to_csv("annotations.csv", index=False)
-    st.success("Annotations saved successfully.")
+            if st.button("Save Annotations"):
+                df = pd.DataFrame(boxes, columns=["xmin", "ymin", "xmax", "ymax"])
+                st.write("Annotations saved as CSV:")
+                st.write(df)
+                df.to_csv("annotations.csv", index=False)
 
 if __name__ == "__main__":
     main()
