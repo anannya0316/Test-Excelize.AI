@@ -4,12 +4,14 @@ from PIL import Image
 
 # Function to display images and bounding boxes
 def display_image_with_boxes(image, boxes):
-    st.image(image, use_column_width=True)
+    html_code = ""
     for box in boxes:
-        st.markdown(
-            f'<div style="position:absolute; left:{box["x"]}px; top:{box["y"]}px; width:{box["width"]}px; height:{box["height"]}px; border:2px solid red;"></div>',
-            unsafe_allow_html=True
-        )
+        if "x" in box and "y" in box:
+            html_code += f'<div style="position:absolute; left:{box["x"]}px; top:{box["y"]}px; width:100px; height:100px; border:2px solid red;"></div>'
+        else:
+            print("Invalid box:", box)
+    st.markdown(html_code, unsafe_allow_html=True)
+
 
 def main():
     st.title("Image Annotation Tool")
