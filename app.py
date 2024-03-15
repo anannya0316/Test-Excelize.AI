@@ -23,7 +23,12 @@ def main():
         st.image(image, caption="Uploaded Image", use_column_width=True)
 
         # Render bounding boxes
-        boxes = [{"x": 100, "y": 100, "width": 50, "height": 50}, ...]  # Example bounding box coordinates
+        boxes = [
+    {"x": 100, "y": 100},
+    {"x": 200, "y": 200},
+    # Add more boxes as needed
+]
+  # Example bounding box coordinates
         display_image_with_boxes(image, boxes)
 
         # Button to save annotations
