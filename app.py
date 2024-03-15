@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+from PIL import Image
 
 # Function to display images and bounding boxes
 def display_image_with_boxes(image, boxes):
