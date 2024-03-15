@@ -26,11 +26,11 @@ if __name__ == "__main__":
     main()
 
   # Example bounding box coordinates
-        display_image_with_boxes(image, boxes)
+display_image_with_boxes(image, boxes)
 
         # Button to save annotations
-        if st.button("Save Annotations"):
-            save_annotations(boxes)
+if st.button("Save Annotations"):
+        save_annotations(boxes)
 
 def save_annotations(boxes):
     # Convert bounding boxes to DataFrame
