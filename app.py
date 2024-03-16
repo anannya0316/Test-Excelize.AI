@@ -1,46 +1,53 @@
 import streamlit as st
-import pandas as pd
-from PIL import ImageDraw, Image
+import os
+import shutil
+from PIL import Image
 
-def display_image_with_boxes(image, boxes):
-    st.image(image, use_column_width=True)
-    drawn = ImageDraw.Draw(image)
+# Function to upload image and return its path
+def upload_image():
+    uploaded_file = st.file_uploader("Upload an image", type=["jpg", "png"])
+    if uploaded_file is not None:
+        image_path = os.path.join("/tmp", uploaded_file.name)
+        with open(image_path, "wb") as f:
+            f.write(uploaded_file.getbuffer())
+        return image_path
+    return None
 
-    for box in boxes:
-        xmin, ymin, xmax, ymax = box
-        drawn.rectangle([xmin, ymin, xmax, ymax], outline="red")
+# Get the path of the uploaded image
+image_path = upload_image()
 
-    return image
+# Now you can use the image_path variable in your YOLOv9 detection code
+if image_path:
+    def perform_object_detection():
+        import subprocess
+        
+        # Install dependencies
+        subprocess.run(["pip", "install", "pydantic", "opencv-python-headless"])
+        
+        # Clone the YOLOv9 repository
+        subprocess.run(["git", "clone", "https://github.com/WongKinYiu/yolov9.git"])
+        
+        # Change directory to YOLOv9
+        os.chdir("yolov9")
+        
+        # Install requirements
+        subprocess.run(["pip", "install", "-r", "requirements.txt"])
+        
+        # Run detection
+        subprocess.run(["python", "detect.py", "--weights", "yolov9-c.pt", "--source", image_path])
+        
+        # Move output image to Downloads folder
+        output_image = "runs/detect/exp_29/image.jpg"
+        downloads_path = os.path.join(os.path.expanduser('~'), 'Downloads')
+        shutil.move(output_image, downloads_path)
+        
+        # Display the output image
+        display_image(downloads_path, "image.jpg")
 
-def main():
-    st.title("Image Annotation Tool")
+    # Function to display the image
+    def display_image(directory, filename):
+        image = Image.open(os.path.join(directory, filename))
+        st.image(image, caption='Output Image', use_column_width=True)
 
-    uploaded_image = st.file_uploader("Upload Image", type=["jpg", "jpeg", "png"])
-
-    if uploaded_image is not None:
-        image = Image.open(uploaded_image)
-        st.image(image, caption="Uploaded Image", use_column_width=True)
-
-        num_boxes = st.number_input("Number of Boxes", min_value=1, value=1)
-
-        if st.button("Annotate"):
-            boxes = []
-            for _ in range(num_boxes):
-                st.write(f"Box {_ + 1}")
-                xmin = st.number_input("X min", min_value=0, max_value=image.width - 1, value=0)
-                ymin = st.number_input("Y min", min_value=0, max_value=image.height - 1, value=0)
-                xmax = st.number_input("X max", min_value=xmin + 1, max_value=image.width, value=image.width)
-                ymax = st.number_input("Y max", min_value=ymin + 1, max_value=image.height, value=image.height)
-                boxes.append((xmin, ymin, xmax, ymax))
-
-            annotated_image = display_image_with_boxes(image.copy(), boxes)
-            st.image(annotated_image, caption="Annotated Image", use_column_width=True)
-
-            if st.button("Save Annotations"):
-                df = pd.DataFrame(boxes, columns=["xmin", "ymin", "xmax", "ymax"])
-                st.write("Annotations saved as CSV:")
-                st.write(df)
-                df.to_csv("annotations.csv", index=False)
-
-if __name__ == "__main__":
-    main()
+    # Call the function to perform object detection
+    perform_object_detection()
