@@ -18,7 +18,16 @@ image_path = upload_image()
 
 # Now you can use the image_path variable in your YOLOv9 detection code
 if image_path:
-    def perform_object_detection():
+    perform_object_detection()
+    
+    # Function to display the image
+def display_image(directory, filename):
+    image = Image.open(os.path.join(directory, filename))
+    st.image(image, caption='Output Image', use_column_width=True)
+
+# Call the function to perform object detection
+
+def perform_object_detection():
         import subprocess
         
         # Install dependencies
@@ -43,14 +52,6 @@ if image_path:
         
         # Display the output image
         display_image(downloads_path, "image.jpg")
-
-    # Function to display the image
-def display_image(directory, filename):
-    image = Image.open(os.path.join(directory, filename))
-    st.image(image, caption='Output Image', use_column_width=True)
-
-# Call the function to perform object detection
-perform_object_detection()
 
 
 
