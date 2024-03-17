@@ -46,11 +46,11 @@ if image_path:
 
     # Function to display the image
 def display_image(directory, filename):
-        image = Image.open(os.path.join(directory, filename))
-        st.image(image, caption='Output Image', use_column_width=True)
+    image = Image.open(os.path.join(directory, filename))
+    st.image(image, caption='Output Image', use_column_width=True)
 
-    # Call the function to perform object detection
-    perform_object_detection()
+# Call the function to perform object detection
+perform_object_detection()
 
 
 
