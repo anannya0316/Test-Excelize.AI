@@ -55,7 +55,7 @@
 
 
 import streamlit as st
-          
+from yolov9_code import perform_object_detection 
 def main():
     st.title("Image Uploader")
 
