@@ -58,8 +58,8 @@ import streamlit as st
 
 def perform_object_detection(uploaded_file):
   from google.colab import drive
-  drive.mount('/content/drive')
-  %cd /content/drive/MyDrive/yolov9-main
+  drive.mount('/content/drive/MyDrive/yolov9-main')
+  #%cd /content/drive/MyDrive/yolov9-main
   !python detect.py --weights /content/drive/MyDrive/yolov9-main/yolov9-c.pt --source {uploaded_file} --device cpu
   import os
   from IPython.display import Image, display
