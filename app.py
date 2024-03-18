@@ -55,7 +55,7 @@ if __name__ == "__main__":
 #     image = Image.open(os.path.join(directory, filename))
 #     st.image(image, caption='Output Image', use_column_width=True)
     
-# # Function to upload image and return its path
+#  Function to upload image and return its path
 # def upload_image():
 #     uploaded_file = st.file_uploader("Upload an image", type=["jpg", "png"])
 #     if uploaded_file is not None:
@@ -65,10 +65,10 @@ if __name__ == "__main__":
 #         return image_path
 #     return None
 
-# # Get the path of the uploaded image
+#  Get the path of the uploaded image
 # image_path = upload_image()
 
-# # Now you can use the image_path variable in your YOLOv9 detection code
+#  Now you can use the image_path variable in your YOLOv9 detection code
 # if image_path:
 #     perform_object_detection()
     
