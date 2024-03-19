@@ -17,16 +17,11 @@
 
 # if __name__ == "__main__":
 #     main()
-
 import subprocess
 import os
-from google.colab import drive
 from PIL import Image
 
 def perform_object_detection(uploaded_file):
-    # Mount Google Drive
-    drive.mount('/content/drive')
-
     # Define the path to the YOLOv9 detection script
     detect_script = '/content/drive/MyDrive/yolov9-main/detect.py'
 
@@ -40,6 +35,7 @@ def perform_object_detection(uploaded_file):
     for filename in os.listdir(output_dir):
         if filename.endswith('.jpg'):
             display(Image.open(os.path.join(output_dir, filename)), caption='Detected Objects', use_column_width=True)
+
 
 def main():
     st.title("YOLOv9 Object Detection")
