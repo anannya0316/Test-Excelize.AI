@@ -44,7 +44,6 @@ with tempfile.NamedTemporaryFile(delete=False, suffix='.pt') as temp_file:
     save_path = temp_file.name
 
 def perform_object_detection(uploaded_file):
-    
     # Define the path to the YOLOv9 detection script
     detect_script = 'detect.py'
     
@@ -52,20 +51,21 @@ def perform_object_detection(uploaded_file):
     output_dir = tempfile.mkdtemp()
     
     # Save the uploaded image to a temporary file
-    temp_image_path = os.path.join(output_dir, 'uploaded_image.jpg')
-    image.save(temp_image_path)
+    with open(os.path.join(output_dir, 'uploaded_image.jpg'), 'wb') as f:
+        f.write(uploaded_file.getbuffer())
     
     # Run YOLOv9 detection script using subprocess
-    subprocess.run(['python', detect_script, '--weights', save_path, '--source', temp_image_path, '--device', 'cpu', '--output', output_dir])
+    subprocess.run(['python', detect_script, '--weights', save_path, '--source', os.path.join(output_dir, 'uploaded_image.jpg'), '--device', 'cpu', '--output', output_dir])
     
     # Display the uploaded image
-    st.image(image, caption='Uploaded Image', use_column_width=True)
+    st.image(uploaded_file, caption='Uploaded Image', use_column_width=True)
     
     # Display the output images with detected labels
     for filename in os.listdir(output_dir):
         if filename.endswith('.jpg'):
             image_path = os.path.join(output_dir, filename)
-            st.image(image_path, caption='Detected Objects', use_column_width=True)
+            st.image(Image.open(image_path), caption='Detected Objects', use_column_width=True)
+
 
 
 def main():
