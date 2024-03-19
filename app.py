@@ -17,7 +17,6 @@
 
 # if __name__ == "__main__":
 #     main()
-
 import subprocess
 import os
 import tempfile
@@ -34,7 +33,7 @@ def perform_object_detection(uploaded_file):
     # Run YOLOv9 detection script using subprocess
     subprocess.run(['python', detect_script, '--weights', '/content/drive/MyDrive/yolov9-main/yolov9-c.pt', '--source', str(uploaded_file), '--device', 'cpu', '--output', output_dir])
     
-    # Display the output images
+    # Display the output images with detected labels
     for filename in os.listdir(output_dir):
         if filename.endswith('.jpg'):
             image_path = os.path.join(output_dir, filename)
