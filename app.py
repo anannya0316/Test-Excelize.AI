@@ -50,7 +50,7 @@ def perform_object_detection(uploaded_file):
     output_dir = tempfile.mkdtemp()
     
     # Run YOLOv9 detection script using subprocess
-    subprocess.run(['python', detect_script, '--weights', '/content/drive/MyDrive/yolov9-main/yolov9-c.pt', '--source', str(uploaded_file), '--device', 'cpu', '--output', output_dir])
+    subprocess.run(['python', detect_script, '--weights', save_path, '--source', str(uploaded_file), '--device', 'cpu', '--output', output_dir])
     
     # Display the output images with detected labels
     for filename in os.listdir(output_dir):
