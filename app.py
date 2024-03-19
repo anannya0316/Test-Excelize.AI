@@ -17,11 +17,8 @@
 
 # if __name__ == "__main__":
 #     main()
-
 import streamlit as st
-import sys
-sys.path.append('yolov9_code.py')  # Replace '/path/to/yolov9_code_directory' with the actual path
-import yolov9_code
+from yolov9_code import perform_object_detection
 
 def main():
     st.title("Image Uploader")
@@ -34,7 +31,7 @@ def main():
         st.image(uploaded_file, caption='Uploaded Image', use_column_width=True)
 
         # Call the perform_object_detection function
-        yolov9_code.perform_object_detection(uploaded_file)
+        perform_object_detection(uploaded_file)
 
 if __name__ == "__main__":
     main()
