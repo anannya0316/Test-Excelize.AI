@@ -24,6 +24,7 @@ import tempfile
 from PIL import Image
 import streamlit as st
 import requests
+from PIL import Image
 
 # Function to download file content from Google Drive
 def download_file_from_google_drive(file_id):
@@ -43,20 +44,31 @@ with tempfile.NamedTemporaryFile(delete=False, suffix='.pt') as temp_file:
     save_path = temp_file.name
 
 def perform_object_detection(uploaded_file):
+    # Open the uploaded image
+    image = Image.open(uploaded_file)
+    
     # Define the path to the YOLOv9 detection script
     detect_script = 'detect.py'
     
     # Create a temporary directory to store the output images
     output_dir = tempfile.mkdtemp()
     
+    # Save the uploaded image to a temporary file
+    temp_image_path = os.path.join(output_dir, 'uploaded_image.jpg')
+    image.save(temp_image_path)
+    
     # Run YOLOv9 detection script using subprocess
-    subprocess.run(['python', detect_script, '--weights', save_path, '--source', str(uploaded_file), '--device', 'cpu', '--output', output_dir])
+    subprocess.run(['python', detect_script, '--weights', save_path, '--source', temp_image_path, '--device', 'cpu', '--output', output_dir])
+    
+    # Display the uploaded image
+    st.image(image, caption='Uploaded Image', use_column_width=True)
     
     # Display the output images with detected labels
     for filename in os.listdir(output_dir):
         if filename.endswith('.jpg'):
             image_path = os.path.join(output_dir, filename)
             st.image(image_path, caption='Detected Objects', use_column_width=True)
+
 
 def main():
     st.title("YOLOv9 Object Detection")
