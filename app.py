@@ -44,8 +44,6 @@ with tempfile.NamedTemporaryFile(delete=False, suffix='.pt') as temp_file:
     save_path = temp_file.name
 
 def perform_object_detection(uploaded_file):
-    # Open the uploaded image
-    image = Image.open(uploaded_file)
     
     # Define the path to the YOLOv9 detection script
     detect_script = 'detect.py'
