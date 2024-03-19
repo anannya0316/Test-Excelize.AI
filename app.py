@@ -17,6 +17,8 @@
 
 # if __name__ == "__main__":
 #     main()
+
+import streamlit as st
 import subprocess
 import os
 from PIL import Image
@@ -34,7 +36,7 @@ def perform_object_detection(uploaded_file):
     # Display the output images
     for filename in os.listdir(output_dir):
         if filename.endswith('.jpg'):
-            display(Image.open(os.path.join(output_dir, filename)), caption='Detected Objects', use_column_width=True)
+            st.image(Image.open(os.path.join(output_dir, filename)), caption='Detected Objects', use_column_width=True)
 
 
 def main():
