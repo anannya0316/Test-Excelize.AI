@@ -17,15 +17,34 @@
 
 # if __name__ == "__main__":
 #     main()
+
 import subprocess
 import os
 import tempfile
 from PIL import Image
 import streamlit as st
+import requests
+
+# Function to download file content from Google Drive
+def download_file_from_google_drive(file_id):
+    url = f"https://drive.google.com/uc?export=download&id={file_id}"
+    response = requests.get(url)
+    return response.content
+
+# Replace 'YOUR_FILE_ID' with the file ID from your Google Drive link
+file_id = '19KbrZ_swK_jbS0Qv2sHZibh8XGEh5wBs'
+
+# Download the file content from Google Drive
+file_content = download_file_from_google_drive(file_id)
+
+# Save the file content to a temporary file
+with tempfile.NamedTemporaryFile(delete=False, suffix='.pt') as temp_file:
+    temp_file.write(file_content)
+    save_path = temp_file.name
 
 def perform_object_detection(uploaded_file):
     # Define the path to the YOLOv9 detection script
-    detect_script = '/content/drive/MyDrive/yolov9-main/detect.py'
+    detect_script = 'detect.py'
     
     # Create a temporary directory to store the output images
     output_dir = tempfile.mkdtemp()
