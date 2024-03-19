@@ -20,6 +20,7 @@
 
 import subprocess
 import os
+import tempfile
 from PIL import Image
 import streamlit as st
 
@@ -27,9 +28,8 @@ def perform_object_detection(uploaded_file):
     # Define the path to the YOLOv9 detection script
     detect_script = '/content/drive/MyDrive/yolov9-main/detect.py'
     
-    # Define the directory to save the output images
-    output_dir = '/content/output_images'
-    os.makedirs(output_dir, exist_ok=True)  # Create the directory if it doesn't exist
+    # Create a temporary directory to store the output images
+    output_dir = tempfile.mkdtemp()
     
     # Run YOLOv9 detection script using subprocess
     subprocess.run(['python', detect_script, '--weights', '/content/drive/MyDrive/yolov9-main/yolov9-c.pt', '--source', str(uploaded_file), '--device', 'cpu', '--output', output_dir])
