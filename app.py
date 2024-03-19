@@ -22,10 +22,6 @@ import os
 import tempfile
 from PIL import Image
 import streamlit as st
-from google.colab import drive
-
-# Mount Google Drive
-drive.mount('/content/drive')
 
 def perform_object_detection(uploaded_file):
     # Define the path to the YOLOv9 detection script
